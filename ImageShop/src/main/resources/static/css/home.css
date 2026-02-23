@@ -1,13 +1,128 @@
+/* 1. 전체 레이아웃: 모든 요소를 수직/수평 중앙으로 */
 body {
-  background-color: lightblue;
+    background-color: #fff0f3;
+    color: #4a0010; /* 버건디 한 방울 섞인 텍스트 */
+    font-family: 'Pretendard', sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 수평 중앙 */
+    min-height: 100vh;
 }
 
-h1 {
-  color: white;
-  text-align: center;
+/* 2. 공통 헤더 및 메뉴 영역 (상단 고정 및 중앙 정렬) */
+header, div[align="center"], div[align="right"] {
+    width: 100%;
+    max-width: 900px; /* 전체 컨텐츠 폭 제한 */
+    display: flex;
+    justify-content: center; /* 내부 요소 중앙 정렬 */
+    gap: 15px;
+    margin: 10px 0;
 }
 
-p {
-  font-family: verdana;
-  font-size: 20px;
+/* 3. 메뉴 링크 버튼 (깨짐 방지 및 둥근 스타일) */
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #ff4d6d;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(255, 77, 109, 0.1);
+    white-space: nowrap; /* 글자 줄바꿈 방지 */
+    transition: 0.3s;
+}
+
+a:hover {
+    background-color: #800020; /* 호버 시 버건디 */
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* 4. 메인 컨테이너 카드 (이미지의 그 상자!) */
+.container, div[align="center"]:not(:has(a)) {
+    background: #ffffff;
+    width: 90%;
+    max-width: 700px;
+    padding: 40px;
+    margin: 30px auto;
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(128, 0, 32, 0.1);
+    border-top: 6px solid #800020; /* 상단 버건디 포인트 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 5. 테이블 및 입력창 (가운데 정렬 유지) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th {
+    background-color: #ff8fa3;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+td {
+    padding: 15px;
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    border: 1px solid #ffccd5;
+    border-radius: 8px;
+    outline-color: #800020;
+}
+
+/* 6. 버튼 스타일 */
+button {
+    background-color: #800020; /* 메인 버건디 */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 5px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #4a0010;
+    transform: scale(1.05);
+}
+
+/* 곰돌이 이모티콘: 뿅뿅 뛰는 애니메이션 */
+h1::before {
+    content: '♥';
+    display: inline-block;
+    font-size: 4rem;
+    animation: bear-bounce 2s infinite;
+}
+/* 곰돌이 바운스 */
+@keyframes bear-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+/* 7. 손 흔드는 애니메이션 (Home 화면용) */
+h1::after {
+    content: '👋';
+    display: inline-block;
+    animation: wave 2.5s infinite;
+    margin-left: 10px;
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    20%, 60% { transform: rotate(15deg); }
+    40% { transform: rotate(-10deg); }
 }

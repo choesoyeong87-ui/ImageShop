@@ -1,0 +1,89 @@
+/* 1. 전체 배경 및 초기화 */
+body {
+    background: linear-gradient(135deg, #fff5f7 0%, #fde2e4 100%);
+    color: #4a4a4a;
+    font-family: 'Pretendard', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* 2. 헤더 & 메뉴 공통 정렬 (테이블 충돌 해결) */
+div[align="center"], div[align="right"] {
+    padding: 15px 0;
+}
+
+/* 테이블의 고정 너비를 무시하도록 설정 */
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+td {
+    width: auto !important; /* JSP의 width="80" 무시 */
+    padding: 10px !important;
+}
+
+/* 3. 링크 스타일 (글자 겹침 방지 핵심) */
+a {
+    display: inline-block; /* 영역 확보 */
+    text-decoration: none;
+    color: #ff758f;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 50px; /* 완벽한 알약 모양 */
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    border: 1px solid #ffccd5;
+    white-space: nowrap; /* 글자 줄바꿈(겹침) 절대 방지 */
+    box-shadow: 0 4px 6px rgba(255, 182, 193, 0.1);
+}
+
+a:hover {
+    background: #ff758f;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* 4. 메인 콘텐츠 박스 */
+.container-box { /* div[align="center"] 하위의 실제 컨텐츠 */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 40px;
+    margin: 20px auto;
+    max-width: 650px;
+    box-shadow: 0 15px 35px rgba(255, 182, 193, 0.2);
+}
+
+/* 5. 입력창 & 버튼 (이미지 반영 수정) */
+input[type="text"] {
+    border: 2px solid #fce4ec;
+    padding: 10px;
+    border-radius: 8px;
+    width: 200px;
+}
+
+button {
+    background: #ff758f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button:hover {
+    background: #ff4d6d;
+}
+
+/* 구분선 */
+hr {
+    border: 0;
+    height: 1px;
+    background: #ffccd5;
+    margin: 10px 0;
+    opacity: 0.5;
+}
