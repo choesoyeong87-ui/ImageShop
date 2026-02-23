@@ -61,6 +61,8 @@
 		let result = "${msg}";
 		if (result === "SUCCESS") {
 			alert("<spring:message code='common.processSuccess' />");
+		}else if(result === "FAIL"){
+			alert("삭제처리 실패");
 		}
 	</script>
 </body>
