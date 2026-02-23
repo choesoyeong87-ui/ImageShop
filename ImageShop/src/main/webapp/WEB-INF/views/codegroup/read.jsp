@@ -1,0 +1,80 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%> 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Image Shop</title>
+<!-- <script type="text/javascript" src="/js/test.js"></script> -->
+<link rel="stylesheet" href="/css/codegroup.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/menu.jsp" />
+	<div align="center">
+		<h2>
+			<spring:message code="codegroup.header.read" />
+		</h2>
+		<form:form modelAttribute="codeGroup">
+			<table>
+				<tr>
+					<td><spring:message code="codegroup.groupCode" /></td>
+					<td><form:input path="groupCode" readonly="true"/></td>
+					<td><font color="red"><form:errors path="groupCode" id="groupCode"/></font></td>
+				</tr>
+				<tr>
+					<td><spring:message code="codegroup.groupName" /></td>
+					<td><form:input path="groupName" readonly="true"/></td>
+					<td><font color="red"><form:errors path="groupName" /></font></td>
+				</tr>
+			</table>
+		</form:form>
+
+		<div>
+			<button type="submit" id="btnEdit">
+				<spring:message code="action.edit" />
+			</button>
+			<button type="submit" id="btnRemove">
+				<spring:message code="action.remove" />
+			</button>
+			<button type="submit" id="btnList">
+				<spring:message code="action.list" />
+			</button>
+		</div>
+	</div>
+
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+
+	<script>
+	<!--html코드가 document로 객체가 메모리에 로딩이 완료되었으면 이벤트를 걸겠다-->
+		$(document).ready(function() {
+			<!--for 객체 찾기-->
+			let formObj = $("#codeGroup");
+			<!--전송버튼을 클릭할때 작동되는 핸들러임/서버로 전송-->
+			$("#btnEdit").on("click", function() {
+				let groupCode = $("#groupCode");
+				let groupCodeValue = groupCode.val();
+				self.location = "/codegroup/modify?groupCode="+groupCodeValue;
+			});
+			<!--목록버튼을 클릭했을때 작동되는 핸들러임-->
+			
+			$("#btnRemove").on("click", function() {
+				formObj.attr("action","/codegroup/remove");
+				formObj.attr("method","post");
+				formObj.submit();
+				self.location = "/codegroup/remove?groupCode="+groupCodeValue;
+			});
+			
+			$("#btnList").on("click", function() {
+				<!--서버에페이지요청 http://localhost:8080/codegroup/list-->
+				self.location = "/codegroup/list";
+			});
+		});
+	</script>
+</body>
+</html>
