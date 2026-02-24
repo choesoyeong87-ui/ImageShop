@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.project.confing.I18nConfiguration;
+import com.project.config.I18nConfiguration;
 import com.project.domain.CodeGroup;
 import com.project.service.CodeGroupService;
 
