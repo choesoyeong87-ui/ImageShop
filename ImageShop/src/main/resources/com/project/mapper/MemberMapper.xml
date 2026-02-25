@@ -39,17 +39,56 @@
 		SELECT
 		user_no,user_id,user_pw,user_name,
 		(SELECT code_name FROM code_detail
-		WHERE group_code ='B03' AND code_value = '개발자') AS job,
+		WHERE group_code ='A00' AND code_value = 'job') AS job,
 		coin,reg_date
 		FROM member ORDER BY reg_date DESC
 	</select>
 
 	<!-- 상세 조회 -->
 	<select id="read" resultMap="memberMap">
-		SELECT M.user_no,M.user_id,user_pw,user_name,job,coin,reg_date,upd_date,
+		SELECT
+		M.user_no,M.user_id,user_pw,user_name,job,coin,reg_date,upd_date,
 		A.user_no, A.auth
-		FROM member M LEFT OUTER JOIN member_auth A ON M.user_no = A.user_no
+		FROM member M LEFT OUTER JOIN member_auth A ON
+		M.user_no = A.user_no
 		WHERE M.user_no = #{userNo}
 	</select>
+	
+	<!-- 상세 조회 -->
+	<select id="readByUserId" resultMap="memberMap">
+		SELECT
+		M.user_no,M.user_id,user_pw,user_name,job,coin,reg_date,upd_date,
+		A.user_no, A.auth
+		FROM member M LEFT OUTER JOIN member_auth A ON
+		M.user_no = A.user_no
+		WHERE M.user_id = #{userId}
+	</select>
 
+	<!-- 권한 수정 -->
+	<insert id="modifyAuth">
+		INSERT INTO member_auth (user_no, auth)VALUES
+		(#{userNo}, #{auth})
+	</insert>
+
+	<!-- 권한 삭제 -->
+	<insert id="deleteAuth">
+		DELETE FROM member_auth where user_no = #{userNo}
+	</insert>
+
+	<!-- 수정 처리 -->
+	<update id="modify">
+		UPDATE member SET user_name =#{userName}, job =#{job}
+		WHERE user_no = #{userNo}
+	</update>
+
+
+	<!-- 삭제 처리 -->
+	<delete id="remove">
+		DELETE FROM member WHERE user_no = #{userNo}
+	</delete>
+
+	<!-- 회원 테이블의 데이터 건수 조회 -->
+	<select id="countAll" resultType="int">
+		SELECT count(*) FROM member
+	</select>
 </mapper>

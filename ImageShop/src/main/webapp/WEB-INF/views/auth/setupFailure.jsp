@@ -4,8 +4,7 @@
 <link rel="stylesheet" href="/css/pink.css">
 <div>
 	<h2>
-		<spring:message code="common.joinMemberFailed"
-			arguments="${userName}" />
+		<spring:message code="common.cannotSetupAdmin"/>
 	</h2>
-	<a href="/auth/login"><spring:message code="action.login" /></a>
+	<a href="/auth/login"><spring:message code="action.home" /></a>
 </div>
