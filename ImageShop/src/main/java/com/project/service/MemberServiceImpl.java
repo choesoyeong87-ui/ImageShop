@@ -52,9 +52,9 @@ public class MemberServiceImpl implements MemberService {
 			MemberAuth memberAuth = authList.get(i);
 			String auth = memberAuth.getAuth();
 
-			if (auth == null || auth.trim().length() == 0) {
+			if (auth == null || auth.trim().length() == 0) 
 				continue;
-			}
+			
 
 			// 변경된 회원권한 추가
 			memberAuth.setUserNo(userNo);
