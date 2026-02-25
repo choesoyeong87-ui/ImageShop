@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<link rel="stylesheet" href="/css/codegroup.css">
+<link rel="stylesheet" href="/css/pink.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <h2>
 	<spring:message code="codedetail.header.modify" />

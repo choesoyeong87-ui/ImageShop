@@ -53,6 +53,16 @@
 		M.user_no = A.user_no
 		WHERE M.user_no = #{userNo}
 	</select>
+	
+	<!-- 상세 조회 -->
+	<select id="readByUserId" resultMap="memberMap">
+		SELECT
+		M.user_no,M.user_id,user_pw,user_name,job,coin,reg_date,upd_date,
+		A.user_no, A.auth
+		FROM member M LEFT OUTER JOIN member_auth A ON
+		M.user_no = A.user_no
+		WHERE M.user_id = #{userId}
+	</select>
 
 	<!-- 권한 수정 -->
 	<insert id="modifyAuth">
