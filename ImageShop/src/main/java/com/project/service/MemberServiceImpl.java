@@ -38,28 +38,38 @@ public class MemberServiceImpl implements MemberService {
 		return mapper.read(member);
 	}
 
+	@Transactional
 	@Override
 	public int modify(Member member) throws Exception {
 		// return mapper.modify(member);
 		// 회원권한 수정
-		mapper.update(member);
+		int count = mapper.modify(member);
 		// 회원권한 삭제
-		int userNo = member.getUserNo();
-		mapper.deleteAuth(userNo);
-		//사용자가 선택한 권한 내용을 가져온다.
+		mapper.deleteAuth(member);
+		// 사용자가 선택한 권한 내용을 가져온다.
 		List<MemberAuth> authList = member.getAuthList();
 		for (int i = 0; i < authList.size(); i++) {
 			MemberAuth memberAuth = authList.get(i);
 			String auth = memberAuth.getAuth();
 
-			if (auth == null || auth.trim().length() == 0) 
+			if (auth == null || auth.trim().length() == 0)
 				continue;
-			
 
 			// 변경된 회원권한 추가
-			memberAuth.setUserNo(userNo);
+			memberAuth.setUserNo(member.getUserNo());
 			mapper.modifyAuth(memberAuth);
 		}
 
+		return count;
+
+	}
+
+	@Transactional
+	@Override
+	public int remove(Member member) throws Exception {
+		// 회원 권한 삭제
+		mapper.deleteAuth(member);
+
+		return mapper.remove(member);
 	}
 }

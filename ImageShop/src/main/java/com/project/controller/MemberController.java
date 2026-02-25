@@ -50,7 +50,7 @@ public class MemberController {
 			throws Exception {
 		if (result.hasErrors()) {
 			// 직업코드 목록을 조회하여 뷰에 전달
-			String groupCode = "B03";
+			String groupCode = "A00";
 			List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
 
 			model.addAttribute("jobList", jobList);
@@ -75,35 +75,46 @@ public class MemberController {
 	@GetMapping("/read")
 	public void read(Member member, Model model) throws Exception {
 		// 직업코드 목록을 조회하여 뷰에 전달
-		String groupCode = "B03";
+		String groupCode = "A00";
 		List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
 
 		model.addAttribute("jobList", jobList);
 		model.addAttribute(service.read(member));
 	}
-	// 수정 페이지 
-		@PostMapping("/modify")
-		public void modifyForm(Member member, Model model) throws Exception {
-			// 직업코드 목록을 조회하여 뷰에 전달
-			String groupCode = "A00";
-			List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
-			model.addAttribute("jobList", jobList);
-			model.addAttribute(service.read(member));
-		}
-		
-		// 수정 등록처리요청
-		@PostMapping("/modify2") 
-		public String modify(Member member, RedirectAttributes rttr) throws Exception{
+
+	// 수정 페이지
+	@PostMapping("/modify")
+	public void modifyForm(Member member, Model model) throws Exception {
+		// 직업코드 목록을 조회하여 뷰에 전달
+		String groupCode = "A00";
+		List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
+		model.addAttribute("jobList", jobList);
+		model.addAttribute(service.read(member));
+	}
+
+	// 수정 등록처리요청
+	@PostMapping("/modify2")
+	public String modify(Member member, RedirectAttributes rttr) throws Exception {
 		int count = service.modify(member);
 		if (count != 0) {
-			rttr.addFlashAttribute("msg", "SUCCESS"); 			
+			rttr.addFlashAttribute("msg", "SUCCESS");
 		} else {
-			rttr.addFlashAttribute("msg", "FAIL"); 			
+			rttr.addFlashAttribute("msg", "FAIL");
 		}
 		return "redirect:/user/list";
+	}
+
+	// 삭제 처리
+	@PostMapping("/remove") 
+		public String remove(Member member, RedirectAttributes rttr) throws Exception{
+		int count =service.remove(member); 
+		if (count != 0) {
+			rttr.addFlashAttribute("msg", "SUCCESS"); 
+		} else {
+			rttr.addFlashAttribute("msg", "FAIL"); 
 		}
-		
-		
+		return "redirect:/user/list"; 
+	}
 		
 	// 등록 성공 페이지
 	@RequestMapping("/registerSuccess")
@@ -120,8 +131,6 @@ public class MemberController {
 	@RequestMapping("/list")
 	public void list(Model model) throws Exception {
 		model.addAttribute("list", service.list());
-		
-		
-		
+
 	}
 }
