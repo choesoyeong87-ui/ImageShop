@@ -3,12 +3,15 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link rel="stylesheet" href="/css/codegroup.css">
+<link rel="stylesheet" href="/css/white.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%> 
 <h2>
 	<spring:message code="user.header.register" />
 </h2>
 <form:form modelAttribute="member" action="/user/register" method="post">
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
+    <jsp:include page="/WEB-INF/views/common/menu.jsp" />
 	<table class="user_table">
 		<tr>
 			<td><spring:message code="user.userId" /></td>

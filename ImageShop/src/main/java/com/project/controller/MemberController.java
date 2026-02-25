@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -49,7 +50,7 @@ public class MemberController {
 			throws Exception {
 		if (result.hasErrors()) {
 			// 직업코드 목록을 조회하여 뷰에 전달
-			String groupCode = "B01";
+			String groupCode = "B03";
 			List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
 
 			model.addAttribute("jobList", jobList);
@@ -64,19 +65,63 @@ public class MemberController {
 		if (count != 0) {
 			rttr.addFlashAttribute("userName", member.getUserName());
 			return "redirect:/user/registerSuccess";
-		}else {
+		} else {
 			rttr.addFlashAttribute("userName", member.getUserName());
 			return "redirect:/user/registerFailed";
 		}
 	}
-		// 등록 성공 페이지 
-		@RequestMapping("/registerSuccess") 
-		public void registerSuccess(Model model) throws Exception { 
+
+	// 상세 페이지
+	@GetMapping("/read")
+	public void read(Member member, Model model) throws Exception {
+		// 직업코드 목록을 조회하여 뷰에 전달
+		String groupCode = "B03";
+		List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
+
+		model.addAttribute("jobList", jobList);
+		model.addAttribute(service.read(member));
+	}
+	// 수정 페이지 
+		@PostMapping("/modify")
+		public void modifyForm(Member member, Model model) throws Exception {
+			// 직업코드 목록을 조회하여 뷰에 전달
+			String groupCode = "A00";
+			List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
+			model.addAttribute("jobList", jobList);
+			model.addAttribute(service.read(member));
+		}
+		
+		// 수정 등록처리요청
+		@PostMapping("/modify2") 
+		public String modify(Member member, RedirectAttributes rttr) throws Exception{
+		int count = service.modify(member);
+		if (count != 0) {
+			rttr.addFlashAttribute("msg", "SUCCESS"); 			
+		} else {
+			rttr.addFlashAttribute("msg", "FAIL"); 			
+		}
+		return "redirect:/user/list";
+		}
+		
+		
+		
+	// 등록 성공 페이지
+	@RequestMapping("/registerSuccess")
+	public void registerSuccess(Model model) throws Exception {
+
+	}
+
+	// 등록 실패 페이지
+	@RequestMapping("/registerFailed")
+	public void registerFailed(Model model) throws Exception {
+	}
+
+	// 목록 페이지
+	@RequestMapping("/list")
+	public void list(Model model) throws Exception {
+		model.addAttribute("list", service.list());
+		
+		
 		
 	}
-		// 등록 실패 페이지 
-		@RequestMapping("/registerFailed") 
-		public void registerFailed(Model model) throws Exception { 
-			
-		}
 }

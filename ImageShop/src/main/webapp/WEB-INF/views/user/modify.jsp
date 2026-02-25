@@ -3,55 +3,86 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link rel="stylesheet" href="/css/codegroup.css">
+<link rel="stylesheet" href="/css/white.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <h2>
-	<spring:message code="codedetail.header.modify" />
+	<spring:message code="user.header.modify" />
 </h2>
-<form:form modelAttribute="codeDetail">
-	<form:hidden path="groupCode"/>
-	
-	<table>
+<form:form modelAttribute="member" action="/user/modify2" method="post">
+	<form:hidden path="userNo" />
+	<form:hidden path="userId" />
+	<table class="user_table">
 		<tr>
-			<td><spring:message code="codedetail.groupCode" /></td>
-			<td><form:select path="groupCode" items="${groupCodeList}"
-					itemValue="value" itemLabel="label" disabled="true"/></td>
-			<td><font color="red"><form:errors path="groupCode" /></font></td>
+			<td><spring:message code="user.userId" /></td>
+			<td><form:input path="userId"/></td>
+			<td><font color="red"><form:errors path="userId" /></font></td>
+		</tr>
+		
+		<tr>
+			<td><spring:message code="user.userName" /></td>
+			<td><form:input path="userName"/></td>
+			<td><font color="red"><form:errors path="userName" /></font></td>
 		</tr>
 		<tr>
-			<td><spring:message code="codedetail.codeValue" /></td>
-			<td><form:input path="codeValue" readonly="true"/></td>
-			<td><font color="red"><form:errors path="codeValue" /></font></td>
+			<td><spring:message code="user.job" /></td>
+			<td><form:select path="job" items="${jobList}" itemValue="value"
+					itemLabel="label"/></td>
+			<td><font color="red"><form:errors path="job" /></font></td>
 		</tr>
 		<tr>
-			<td><spring:message code="codedetail.codeName" /></td>
-			<td><form:input path="codeName"/></td>
-			<td><font color="red"><form:errors path="codeName" /></font></td>
-		</tr>
+                    <td><spring:message code="user.auth" /> - 1</td>
+                    <td><form:select path="authList[0].auth">
+                            <form:option value="" label="=== 선택해 주세요 ===" />
+                            <form:option value="ROLE_USER" label="사용자" />
+                            <form:option value="ROLE_MEMBER" label="회원" />
+                            <form:option value="ROLE_ADMIN" label="관리자" />
+                        </form:select></td>
+                </tr>
+                <tr>
+                    <td><spring:message code="user.auth" /> - 2</td>
+                    <td><form:select path="authList[1].auth" >
+                            <form:option value="" label="=== 선택해 주세요 ===" />
+                            <form:option value="ROLE_USER" label="사용자" />
+                            <form:option value="ROLE_MEMBER" label="회원" />
+                            <form:option value="ROLE_ADMIN" label="관리자" />
+                        </form:select></td>
+                </tr>
+                <tr>
+                    <td><spring:message code="user.auth" /> - 3</td>
+                    <td><form:select path="authList[2].auth" >
+                            <form:option value="" label="=== 선택해 주세요 ===" />
+                            <form:option value="ROLE_USER" label="사용자" />
+                            <form:option value="ROLE_MEMBER" label="회원" />
+                            <form:option value="ROLE_ADMIN" label="관리자" />
+                        </form:select></td>
+                </tr>
+		
 	</table>
 </form:form>
 <div>
-	<button type="submit" id="btnModify">
+	<button type="button" id="btnModify">
 		<spring:message code="action.modify" />
 	</button>
-	<button type="submit" id="btnList">
-		<spring:message code="action.list" />
-	</button>
+	
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
+		<button type="button" id="btnList">
+			<spring:message code="action.list" />
+		</button>
+	</sec:authorize>
 </div>
 <script>
-	<!--html코드가 document로 객체가 메모리에 로딩이 완료되었으면 이벤트를 걸겠다-->
-		$(document).ready(function() {
-			<!--for 객체 찾기-->
-			let formObj = $("#codeDetail");
-			<!--전송버튼을 클릭할때 작동되는 핸들러임/서버로 전송-->
-			$("#btnModify").on("click", function() {
-				formObj.attr("action","/codedetail/modify");
-				formObj.attr("method","post");
-				formObj.submit();
-			});
-			
-			$("#btnList").on("click", function() {
-				<!--서버에페이지요청 http://localhost:8080/codegroup/list-->
-				self.location = "/codedetail/list";
-			});
+	$(document).ready(function() {
+		let formObj = $("#member");
+		
+		
+		$("#btnModify").on("click", function() {
+			formObj.submit();
 		});
-	</script>
+
+		$("#btnList").on("click", function() {
+			self.location = "/user/list";
+		});
+	});
+</script>
