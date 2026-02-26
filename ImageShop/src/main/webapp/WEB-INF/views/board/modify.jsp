@@ -1,87 +1,100 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<link rel="stylesheet" href="/css/pink.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<h2>
-	<spring:message code="user.header.modify" />
-</h2>
-<form:form modelAttribute="member" action="/user/modify2" method="post">
-	<form:hidden path="userNo" />
-	<form:hidden path="userId" />
-	<table class="user_table">
-		<tr>
-			<td><spring:message code="user.userId" /></td>
-			<td><form:input path="userId"/></td>
-			<td><font color="red"><form:errors path="userId" /></font></td>
-		</tr>
-		
-		<tr>
-			<td><spring:message code="user.userName" /></td>
-			<td><form:input path="userName"/></td>
-			<td><font color="red"><form:errors path="userName" /></font></td>
-		</tr>
-		<tr>
-			<td><spring:message code="user.job" /></td>
-			<td><form:select path="job" items="${jobList}" itemValue="value"
-					itemLabel="label"/></td>
-			<td><font color="red"><form:errors path="job" /></font></td>
-		</tr>
-		<tr>
-                    <td><spring:message code="user.auth" /> - 1</td>
-                    <td><form:select path="authList[0].auth">
-                            <form:option value="" label="=== 선택해 주세요 ===" />
-                            <form:option value="ROLE_USER" label="사용자" />
-                            <form:option value="ROLE_MEMBER" label="회원" />
-                            <form:option value="ROLE_ADMIN" label="관리자" />
-                        </form:select></td>
-                </tr>
-                <tr>
-                    <td><spring:message code="user.auth" /> - 2</td>
-                    <td><form:select path="authList[1].auth" >
-                            <form:option value="" label="=== 선택해 주세요 ===" />
-                            <form:option value="ROLE_USER" label="사용자" />
-                            <form:option value="ROLE_MEMBER" label="회원" />
-                            <form:option value="ROLE_ADMIN" label="관리자" />
-                        </form:select></td>
-                </tr>
-                <tr>
-                    <td><spring:message code="user.auth" /> - 3</td>
-                    <td><form:select path="authList[2].auth" >
-                            <form:option value="" label="=== 선택해 주세요 ===" />
-                            <form:option value="ROLE_USER" label="사용자" />
-                            <form:option value="ROLE_MEMBER" label="회원" />
-                            <form:option value="ROLE_ADMIN" label="관리자" />
-                        </form:select></td>
-                </tr>
-		
-	</table>
-</form:form>
-<div>
-	<button type="button" id="btnModify">
-		<spring:message code="action.modify" />
-	</button>
-	
-	<sec:authorize access="hasRole('ROLE_ADMIN')">
-		<button type="button" id="btnList">
-			<spring:message code="action.list" />
-		</button>
-	</sec:authorize>
-</div>
-<script>
-	$(document).ready(function() {
-		let formObj = $("#member");
-		
-		
-		$("#btnModify").on("click", function() {
-			formObj.submit();
-		});
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Image Shop</title>
+<!-- <script type="text/javascript" src="/js/test.js"></script> -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="/css/pink.css">
 
-		$("#btnList").on("click", function() {
-			self.location = "/user/list";
+</head>
+<body>
+	<!-- jsp:include는 동적처리방식 -->
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/menu.jsp" />
+
+	<div class="container" align="center">
+		<h2>
+			<spring:message code="board.header.read" />
+		</h2>
+		<form:form modelAttribute="board" action="/board/modify" method="post">
+			<form:hidden path="boardNo" />
+			<table>
+				<tr>
+					<td><spring:message code="board.title" /></td>
+					<td><form:input path="title"/></td>
+					<td><font color="red"><form:errors path="title" /></font></td>
+				</tr>
+				<tr>
+					<td><spring:message code="board.writer" /></td>
+					<td><form:input path="writer" readonly="true" /></td>
+					<td><font color="red"><form:errors path="writer" /></font></td>
+				</tr>
+				<tr>
+					<td><spring:message code="board.content" /></td>
+					<td><form:textarea path="content"/></td>
+					<td><font color="red"><form:errors path="content" /></font></td>
+				</tr>
+			</table>
+			<!-- 사용자정보를 가져온다. -->
+			<div class="button-group">
+			<sec:authentication property="principal" var="principal"/>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<button type="button" id="btnModify">
+					<spring:message code="action.modify" />
+				</button>
+				<button type="button" id="btnRemove">
+					<spring:message code="action.remove" />
+				</button>
+				</sec:authorize>
+				
+			<sec:authorize access="hasRole('ROLE_MEMBER')">
+			<c:if test="${principal.username eq board.writer}">
+					<button type="button" id="btnModify">
+					<spring:message code="action.modify" />
+				</button>
+				<button type="button" id="btnRemove">
+					<spring:message code="action.remove" />
+				</button>
+				</c:if>
+				</sec:authorize>
+				
+					<button type="button" id="btnList">
+						<spring:message code="action.list" />
+					</button>
+				
+			</div>
+		</form:form>
+
+
+	</div>
+	
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+
+	<script>
+		$(document).ready(function() {
+			// form의 id를 명시적으로 지정하여 찾는 것이 더 안전합니다.
+			let formObj = $("#board");
+
+			$("#btnModify").on("click", function() {
+				formObj.submit();
+			});
+			$("#btnRemove").on("click", function() {
+				let boardNo = $("#boardNo")
+				self.location = "/board/remove?boardNo="+boardNo.val();
+			});
+			$("#btnList").on("click", function() {
+				self.location = "/board/list";
+			});
 		});
-	});
-</script>
+	</script>
+</body>
+</html>

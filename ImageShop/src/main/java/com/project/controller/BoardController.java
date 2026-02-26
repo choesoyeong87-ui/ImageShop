@@ -56,13 +56,47 @@ public class BoardController {
 	}
 
 	// 게시글 목록 페이지
-	@GetMapping("/list") 
-				public void list(Model model) throws Exception { 
-				model.addAttribute("list", service.list());
+	@GetMapping("/list")
+	public void list(Model model) throws Exception {
+		model.addAttribute("list", service.list());
 	}
-	// 게시글 상세 페이지 
+
+	// 게시글 상세 페이지
 	@GetMapping("/read")
 	public void read(Board board, Model model) throws Exception {
 		model.addAttribute(service.read(board));
+	}
+
+	// 게시글 수정 페이지
+	@GetMapping("/modify")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+	public void modifyForm(Board board, Model model) throws Exception {
+		model.addAttribute(service.read(board));
+	}
+
+	// 게시글 수정 처리
+	@PostMapping("/modify")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+	public String modify(Board board, RedirectAttributes rttr) throws Exception {
+		int count = service.modify(board);
+		if (count != 0) {
+			rttr.addFlashAttribute("msg", "SUCCESS");
+		} else {
+			rttr.addFlashAttribute("msg", "FAIL");
+		}
+		return "redirect:/board/list";
+	}
+
+	// 게시글 삭제 처리
+	@GetMapping("/remove")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+	public String remove(Board board, RedirectAttributes rttr) throws Exception {
+		int count = service.remove(board);
+		if (count != 0) {
+			rttr.addFlashAttribute("msg", "SUCCESS");
+		} else {
+			rttr.addFlashAttribute("msg", "FAIL");
+		}
+		return "redirect:/board/list";
 	}
 }
