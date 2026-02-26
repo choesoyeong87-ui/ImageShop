@@ -27,10 +27,13 @@
 		</h2>
 		<form:form modelAttribute="board" action="/board/modify" method="post">
 			<form:hidden path="boardNo" />
+			!-- 현재 페이지 번호와 페이징 크기를 숨겨진 필드 요소를 사용하여 전달한다. --> 
+ 			<input type="hidden" id="page" name="page" value="${pgrq.page}">
+			<input type="hidden" id="sizePerPage" name="sizePerPage" value="${pgrq.sizePerPage}">
 			<table>
 				<tr>
 					<td><spring:message code="board.title" /></td>
-					<td><form:input path="title"/></td>
+					<td><form:input path="title" /></td>
 					<td><font color="red"><form:errors path="title" /></font></td>
 				</tr>
 				<tr>
@@ -40,43 +43,43 @@
 				</tr>
 				<tr>
 					<td><spring:message code="board.content" /></td>
-					<td><form:textarea path="content"/></td>
+					<td><form:textarea path="content" /></td>
 					<td><font color="red"><form:errors path="content" /></font></td>
 				</tr>
 			</table>
 			<!-- 사용자정보를 가져온다. -->
 			<div class="button-group">
-			<sec:authentication property="principal" var="principal"/>
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<button type="button" id="btnModify">
-					<spring:message code="action.modify" />
-				</button>
-				<button type="button" id="btnRemove">
-					<spring:message code="action.remove" />
-				</button>
-				</sec:authorize>
-				
-			<sec:authorize access="hasRole('ROLE_MEMBER')">
-			<c:if test="${principal.username eq board.writer}">
+				<sec:authentication property="principal" var="principal" />
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<button type="button" id="btnModify">
-					<spring:message code="action.modify" />
-				</button>
-				<button type="button" id="btnRemove">
-					<spring:message code="action.remove" />
-				</button>
-				</c:if>
-				</sec:authorize>
-				
-					<button type="button" id="btnList">
-						<spring:message code="action.list" />
+						<spring:message code="action.modify" />
 					</button>
-				
+					<button type="button" id="btnRemove">
+						<spring:message code="action.remove" />
+					</button>
+				</sec:authorize>
+
+				<sec:authorize access="hasRole('ROLE_MEMBER')">
+					<c:if test="${principal.username eq board.writer}">
+						<button type="button" id="btnModify">
+							<spring:message code="action.modify" />
+						</button>
+						<button type="button" id="btnRemove">
+							<spring:message code="action.remove" />
+						</button>
+					</c:if>
+				</sec:authorize>
+
+				<button type="button" id="btnList">
+					<spring:message code="action.list" />
+				</button>
+
 			</div>
 		</form:form>
 
 
 	</div>
-	
+
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 	<script>
@@ -88,11 +91,11 @@
 				formObj.submit();
 			});
 			$("#btnRemove").on("click", function() {
-				let boardNo = $("#boardNo")
-				self.location = "/board/remove?boardNo="+boardNo.val();
+				let boardNo = $("#boardNo").val()
+				self.location = "/board/remove?${pgrq.toUriString()}&boardNo=" + boardNo;
 			});
 			$("#btnList").on("click", function() {
-				self.location = "/board/list";
+				self.location = "/board/list${pgrq.toUriString()}";
 			});
 		});
 	</script>

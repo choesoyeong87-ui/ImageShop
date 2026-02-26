@@ -32,10 +32,12 @@
 		<table border="1">
 			<tr>
 				<th align="center" width="80"><spring:message code="board.no" /></th>
-				<th align="center" width="320"><spring:message
+				<th align="center" width="100"><spring:message
 						code="board.title" /></th>
 				<th align="center" width="100"><spring:message
 						code="board.writer" /></th>
+				<th align="center" width="320"><spring:message
+						code="board.content" /></th>
 				<th align="center" width="180"><spring:message
 						code="board.regdate" /></th>
 			</tr>
@@ -49,15 +51,13 @@
 					<c:forEach items="${list}" var="board">
 						<tr>
 							<td align="center">${board.boardNo}</td>
-							<td align="left"><a
-								href='/board/read?boardNo=${board.boardNo}'>${board.title}</a></td>
 
 							<td align="left"><a
-								href='/board/read?
+								href='/board/read
 							${pagination.makeQuery(pagination.pageRequest.page)}&boardNo=${board.boardNo}'>
 									${board.title}</a></td>
-
 							<td align="right">${board.writer}</td>
+							<td align="right">${board.content}</td>
 							<td align="center"><fmt:formatDate
 									pattern="yyyy-MM-dd HH:mm" value="${board.regDate}" /></td>
 						</tr>
@@ -65,30 +65,30 @@
 				</c:otherwise>
 			</c:choose>
 		</table>
-		
+
 		<div>
 			<!-- 페이징 네비게이션 -->
-			
-				<c:if test="${pagination.prev}">
-					<a
-						href="/board/list${pagination.makeQuery(pagination.startPage - 1)}">&laquo;</a>
+			<hr>
+			<c:if test="${pagination.prev}">
+				<a
+					href="/board/list${pagination.makeQuery(pagination.startPage - 1)}">&laquo;</a>
+			</c:if>
+			<c:forEach begin="${pagination.startPage }"
+				end="${pagination.endPage }" var="idx">
+				<c:if test="${pagination.pageRequest.page eq idx}">
+					<a href="/board/list${pagination.makeQuery(idx)}">[${idx}]</a>
 				</c:if>
-				<c:forEach begin="${pagination.startPage }"
-					end="${pagination.endPage }" var="idx">
-					<c:if test="${pagination.pageRequest.page eq idx}">
-						<a href="/board/list${pagination.makeQuery(idx)}">[${idx}]</a>
-					</c:if>
-					<c:if test="${!(pagination.pageRequest.page eq idx)}">
-						<a href="/board/list${pagination.makeQuery(idx)}">${idx}</a>
-					</c:if>
-				</c:forEach>
-				<c:if test="${pagination.next && pagination.endPage > 0}">
-					<a href="/board/list${pagination.makeQuery(pagination.endPage +1)}">&raquo;</a>
+				<c:if test="${!(pagination.pageRequest.page eq idx)}">
+					<a href="/board/list${pagination.makeQuery(idx)}">${idx}</a>
 				</c:if>
-			</div>
-
+			</c:forEach>
+			<c:if test="${pagination.next && pagination.endPage > 0}">
+				<a href="/board/list${pagination.makeQuery(pagination.endPage +1)}">&raquo;</a>
+			</c:if>
 		</div>
-	
+
+	</div>
+
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 

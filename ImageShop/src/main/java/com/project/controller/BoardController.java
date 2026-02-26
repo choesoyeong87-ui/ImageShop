@@ -64,6 +64,9 @@ public class BoardController {
 	
 	@GetMapping("/list")
 	public void list(@ModelAttribute("pgrq") PageRequest pageRequest,Model model) throws Exception {
+		if(pageRequest.getPage()== 0) {
+			pageRequest = new PageRequest();
+		}
 		//4페이지를 보여주는 기능,디비에가서 31~40 가져온다.
 		model.addAttribute("list", service.list(pageRequest));
 		//페이지를 보여주는 기능([prev=true]1,2,3,[4],5,6,7,8,9,10[next=true])
@@ -78,22 +81,29 @@ public class BoardController {
 
 	// 게시글 상세 페이지
 	@GetMapping("/read")
-	public void read(Board board, Model model) throws Exception {
+	public void read(Board board, @ModelAttribute("pgrq") PageRequest 
+			pageRequest, Model model) throws Exception {
 		model.addAttribute(service.read(board));
 	}
 
 	// 게시글 수정 페이지
 	@GetMapping("/modify")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-	public void modifyForm(Board board, Model model) throws Exception {
+	public void modifyForm(Board board,@ModelAttribute("pgrq") PageRequest 
+			pageRequest, Model model) throws Exception {
 		model.addAttribute(service.read(board));
 	}
 
 	// 게시글 수정 처리
 	@PostMapping("/modify")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-	public String modify(Board board, RedirectAttributes rttr) throws Exception {
+	public String modify(Board board,@ModelAttribute("pgrq")  PageRequest pageRequest,RedirectAttributes rttr) throws Exception {
 		int count = service.modify(board);
+		
+		// RedirectAttributes 객체에 일회성 데이터를 지정하여 전달한다. 
+		rttr.addAttribute("page", pageRequest.getPage()); 
+		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage()); 
+		
 		if (count != 0) {
 			rttr.addFlashAttribute("msg", "SUCCESS");
 		} else {
@@ -105,8 +115,13 @@ public class BoardController {
 	// 게시글 삭제 처리
 	@GetMapping("/remove")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-	public String remove(Board board, RedirectAttributes rttr) throws Exception {
+	public String remove(Board board,PageRequest pageRequest, RedirectAttributes rttr) throws Exception {
 		int count = service.remove(board);
+		
+		// RedirectAttributes 객체에 일회성 데이터를 지정하여 전달한다. 
+		rttr.addAttribute("page", pageRequest.getPage()); 
+		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage());
+		
 		if (count != 0) {
 			rttr.addFlashAttribute("msg", "SUCCESS");
 		} else {

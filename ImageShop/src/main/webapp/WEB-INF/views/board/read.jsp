@@ -27,6 +27,10 @@
 		</h2>
 		<form:form modelAttribute="board">
 			<form:hidden path="boardNo" />
+			<!-- 현재 페이지 번호와 페이징 크기를 숨겨진 필드 요소를 사용하여 전달한다. -->
+			<input type="hidden" id="page" name="page" value="${pgrq.page}">
+			<input type="hidden" id="sizePerPage" name="sizePerPage"
+				value="${pgrq.sizePerPage}">
 			<table>
 				<tr>
 					<td><spring:message code="board.title" /></td>
@@ -46,56 +50,74 @@
 			</table>
 			<!-- 사용자정보를 가져온다. -->
 			<div class="button-group">
-			<sec:authentication property="principal" var="principal"/>
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<button type="button" id="btnEdit">
-					<spring:message code="action.edit" />
-				</button>
-				<button type="button" id="btnRemove">
-					<spring:message code="action.remove" />
-				</button>
-				</sec:authorize>
-				
-			<sec:authorize access="hasRole('ROLE_MEMBER')">
-			<c:if test="${principal.username eq board.writer}">
+				<sec:authentication property="principal" var="principal" />
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<button type="button" id="btnEdit">
 						<spring:message code="action.edit" />
 					</button>
 					<button type="button" id="btnRemove">
 						<spring:message code="action.remove" />
 					</button>
-				</c:if>
 				</sec:authorize>
-				
-					<button type="button" id="btnList">
-						<spring:message code="action.list" />
-					</button>
-				
+
+				<sec:authorize access="hasRole('ROLE_MEMBER')">
+					<c:if test="${principal.username eq board.writer}">
+						<button type="button" id="btnEdit">
+							<spring:message code="action.edit" />
+						</button>
+						<button type="button" id="btnRemove">
+							<spring:message code="action.remove" />
+						</button>
+					</c:if>
+				</sec:authorize>
+
+				<button type="button" id="btnList">
+					<spring:message code="action.list" />
+				</button>
+
 			</div>
 		</form:form>
 
 
 	</div>
-	
+
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 	<script>
-		$(document).ready(function() {
-			// form의 id를 명시적으로 지정하여 찾는 것이 더 안전합니다.
-			let formObj = $("#board");
+		$(document).ready(
+				function() {
+					// form의 id를 명시적으로 지정하여 찾는 것이 더 안전합니다.
+					let formObj = $("#board");
 
-			$("#btnEdit").on("click", function() {
-				let boardNo = $("#boardNo")
-				self.location = "/board/modify?boardNo="+boardNo.val();
-			});
-			$("#btnRemove").on("click", function() {
-				let boardNo = $("#boardNo")
-				self.location = "/board/remove?boardNo="+boardNo.val();
-			});
-			$("#btnList").on("click", function() {
-				self.location = "/board/list";
-			});
-		});
+					$("#btnEdit").on(
+							"click",
+							function() {
+								let boardNo = $("#boardNo").val();
+								let page = $("#page").val();
+								let sizePerPage = $("#sizePerPage").val();
+								self.location = "/board/modify?page=" + page
+										+ "&sizePerPage=" + sizePerPage
+										+ "&boardNo=" + boardNo;
+							});
+					$("#btnRemove").on(
+							"click",
+							function() {
+								let boardNo = $("#boardNo").val();
+								let page = $("#page").val();
+								let sizePerPage = $("#sizePerPage").val();
+								self.location = "/board/remove?page=" + page
+										+ "&sizePerPage=" + sizePerPage
+										+ "&boardNo=" + boardNo;
+							});
+					$("#btnList").on(
+							"click",
+							function() {
+								let page = $("#page").val();
+								let sizePerPage = $("#sizePerPage").val();
+								self.location = "/board/list?page=" + page
+										+ "&sizePerPage=" + sizePerPage;
+									});
+				});
 	</script>
 </body>
 </html>
