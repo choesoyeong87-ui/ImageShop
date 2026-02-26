@@ -1,15 +1,20 @@
 package com.project.controller;
 
+import java.awt.PageAttributes;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.project.common.domain.PageRequest;
+import com.project.common.domain.Pagination;
 import com.project.common.security.domain.CustomUser;
 import com.project.domain.Board;
 import com.project.domain.Member;
@@ -56,9 +61,19 @@ public class BoardController {
 	}
 
 	// 게시글 목록 페이지
+	
 	@GetMapping("/list")
-	public void list(Model model) throws Exception {
-		model.addAttribute("list", service.list());
+	public void list(@ModelAttribute("pgrq") PageRequest pageRequest,Model model) throws Exception {
+		//4페이지를 보여주는 기능,디비에가서 31~40 가져온다.
+		model.addAttribute("list", service.list(pageRequest));
+		//페이지를 보여주는 기능([prev=true]1,2,3,[4],5,6,7,8,9,10[next=true])
+		Pagination pagination = new Pagination();
+		//현재페이지 4와 한페이지당 보여주는갯수가 10개로 셋팅이 되어있음
+		pagination.setPageRequest(pageRequest);
+		//리스트의 전체갯수를 셋팅하고 다시계산한다.
+		pagination.setTotalCount(service.count());
+		//화면에 페이지를 보여주는 정보를 제공한다.
+		model.addAttribute("pagination",pagination);
 	}
 
 	// 게시글 상세 페이지

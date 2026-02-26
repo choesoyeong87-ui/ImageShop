@@ -51,6 +51,12 @@
 							<td align="center">${board.boardNo}</td>
 							<td align="left"><a
 								href='/board/read?boardNo=${board.boardNo}'>${board.title}</a></td>
+
+							<td align="left"><a
+								href='/board/read?
+							${pagination.makeQuery(pagination.pageRequest.page)}&boardNo=${board.boardNo}'>
+									${board.title}</a></td>
+
 							<td align="right">${board.writer}</td>
 							<td align="center"><fmt:formatDate
 									pattern="yyyy-MM-dd HH:mm" value="${board.regDate}" /></td>
@@ -59,7 +65,30 @@
 				</c:otherwise>
 			</c:choose>
 		</table>
-	</div>
+		
+		<div>
+			<!-- 페이징 네비게이션 -->
+			
+				<c:if test="${pagination.prev}">
+					<a
+						href="/board/list${pagination.makeQuery(pagination.startPage - 1)}">&laquo;</a>
+				</c:if>
+				<c:forEach begin="${pagination.startPage }"
+					end="${pagination.endPage }" var="idx">
+					<c:if test="${pagination.pageRequest.page eq idx}">
+						<a href="/board/list${pagination.makeQuery(idx)}">[${idx}]</a>
+					</c:if>
+					<c:if test="${!(pagination.pageRequest.page eq idx)}">
+						<a href="/board/list${pagination.makeQuery(idx)}">${idx}</a>
+					</c:if>
+				</c:forEach>
+				<c:if test="${pagination.next && pagination.endPage > 0}">
+					<a href="/board/list${pagination.makeQuery(pagination.endPage +1)}">&raquo;</a>
+				</c:if>
+			</div>
+
+		</div>
+	
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 

@@ -11,7 +11,7 @@
 						
 			<sec:authorize access="!isAuthenticated()">
 			<!-- 회원게시판리스트 -->
-                    <td width="120"><a href="/board/list">회원게시판리스트</a></td>
+                    <td width="120"><a href="/board/list?page=1&sizePerPage=10">회원게시판리스트</a></td>
 			</sec:authorize>
 			
 			<!-- 인증을 했을때 메뉴(인가: 관리자, 회원, 메니저)  -->
@@ -30,13 +30,13 @@
 					<td width="120"><a href="/user/list"><spring:message
 								code="menu.user.admin" /></a></td>
 								<!-- 회원게시판리스트 -->
-                    <td width="120"><a href="/board/list">회원게시판리스트</a></td>
+                    <td width="120"><a href="/board/list?page=1&sizePerPage=10">회원게시판리스트</a></td>
 				</sec:authorize>
 
 				<!-- 인증완료,(인가: 관리자)일때 들어가는 메뉴 -->
                 <sec:authorize access="hasRole('ROLE_MEMBER')">
                 <!-- 회원게시판리스트 -->
-                    <td width="120"><a href="/board/list">회원게시판리스트</a></td>
+                    <td width="120"><a href="/board/list?page=1&sizePerPage=10">회원게시판리스트</a></td>
                 </sec:authorize>
                 </sec:authorize>
 		</tr>
