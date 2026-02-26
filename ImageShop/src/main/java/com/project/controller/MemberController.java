@@ -40,7 +40,7 @@ public class MemberController {
 	@GetMapping("/register")
 	public void registerForm(Member member, Model model) throws Exception {
 		// 직업코드 목록을 조회하여 뷰에 전달
-		String groupCode = "최소영";
+		String groupCode = "A00";
 		List<CodeLabelValue> jobList = codeService.getCodeList(groupCode);
 		model.addAttribute("jobList", jobList);
 	}
@@ -49,6 +49,7 @@ public class MemberController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(@Validated Member member, BindingResult result, Model model, RedirectAttributes rttr)
 			throws Exception {
+		log.info("errors: {}", result);
 		if (result.hasErrors()) {
 			// 직업코드 목록을 조회하여 뷰에 전달
 			String groupCode = "A00";
@@ -63,6 +64,7 @@ public class MemberController {
 		member.setUserPw(passwordEncoder.encode(inputPassword));
 
 		int count = service.register(member);
+		log.info("가입 결과 count: " + count);
 		if (count != 0) {
 			rttr.addFlashAttribute("userName", member.getUserName());
 			return "redirect:/user/registerSuccess";

@@ -1,12 +1,17 @@
 package com.project.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-import com.project.mapper.BoardMapper;
+import com.project.domain.Board;
 
-@Service
+
 public interface BoardService{
+
+	public int register(Board board)throws Exception;
+
+	public List<Board> list() throws Exception;
+
+	public Board read(Board board) throws Exception;
 
 }
 
