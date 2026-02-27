@@ -1,88 +1,82 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<link rel="stylesheet" href="/css/pink.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Image Shop</title>
-<!-- <script type="text/javascript" src="/js/test.js"></script> -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="/css/pink.css">
+<h2>
+	<spring:message code="item.header.modify" />
+</h2>
 
-</head>
-<body>
-	<!-- jsp:include는 동적처리방식 -->
-	<jsp:include page="/WEB-INF/views/common/header.jsp" />
-	<jsp:include page="/WEB-INF/views/common/menu.jsp" />
+<form:form modelAttribute="item" action="/item/modify"
+	enctype="multipart/form-data" method="post">
+	<form:hidden path="itemId" />
+	<form:hidden path="pictureUrl" />
+	<form:hidden path="previewUrl" />
 
-	<div class="container" align="center">
-		<h2>
-			<spring:message code="notice.header.read" />
-		</h2>
-		<form:form modelAttribute="notice" action="/notice/modify" method="post">
-			<form:hidden path="noticeNo" />
-			<!-- 현재 페이지 번호와 페이징 크기를 숨겨진 필드 요소를 사용하여 전달한다. -->
-			
-			<table>
-				<tr>
-					<td><spring:message code="notice.title" /></td>
-					<td><form:input path="title"/></td>
-					<td><font color="red"><form:errors path="title" /></font></td>
-				</tr>
-				<tr>
-					<td><spring:message code="notice.content" /></td>
-					<td><form:textarea path="content"/></td>
-					<td><font color="red"><form:errors path="content" /></font></td>
-				</tr>
-			</table>
-			<!-- 사용자정보를 가져온다. -->
-		
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
-					<button type="button" id="btnModify">
-						<spring:message code="action.modify" />
-					</button>
-					
-						
-				</sec:authorize>
+	<table>
+		<tr>
+			<td><spring:message code="item.itemName" /></td>
+			<td><form:input path="itemName" /></td>
+			<td><font color="red"><form:errors path="itemName" /></font></td>
+		</tr>
+		<tr>
+			<td><spring:message code="item.itemPrice" /></td>
+			<td><form:input path="price" />&nbsp;원</td>
+			<td><font color="red"><form:errors path="price" /></font></td>
+		</tr>
+		<tr>
+			<td><spring:message code="item.picture" /></td>
+			<td><img src="picture?itemId=${item.itemId}" width="210"></td>
+		</tr>
+		<tr>
+			<td><spring:message code="item.preview" /></td>
+			<td><img src="display?itemId=${item.itemId}" width="210"></td>
+		</tr>
+		<tr>
 
-			
+			<td><spring:message code="item.itemFile" /></td>
+			<td><input type="file" name="picture" /></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><spring:message code="item.itemPreviewFile" /></td>
+			<td><input type="file" name="preview" /></td>
+			<td></td>
 
-				<button type="button" id="btnList">
-					<spring:message code="action.list" />
-				</button>
+		</tr>
 
-			</div>
-		</form:form>
+		<tr>
 
+			<td><spring:message code="item.itemDescription" /></td>
+			<td><form:textarea path="description" /></td>
+			<td><form:errors path="description" /></td>
+		</tr>
+	</table>
+</form:form>
 
-	</div>
+<div>
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
+		<button type="button" id="btnModify">
+			<spring:message code="action.modify" />
+		</button>
+	</sec:authorize>
 
-	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	<button type="button" id="btnList">
+		<spring:message code="action.list" />
+	</button>
+</div>
+<script>
+	$(document).ready(function() {
+		var formObj = $("#item");
+		$("#btnModify").on("click", function() {
+			formObj.submit();
+		});
 
-	<script>
-		$(document).ready(
-				function() {
-					// form의 id를 명시적으로 지정하여 찾는 것이 더 안전합니다.
-					let formObj = $("#notice");
-
-					$("#btnModify").on(
-							"click",
-							function() {
-							formObj.submit();
-							});
-					
-					$("#btnList").on(
-							"click",
-							function() {
-								self.location = "/notice/list";
-							});
-				});
-	</script>
-</body>
-</html>
+		$("#btnList").on("click", function() {
+			self.location = "/item/list";
+		});
+	});
+</script>

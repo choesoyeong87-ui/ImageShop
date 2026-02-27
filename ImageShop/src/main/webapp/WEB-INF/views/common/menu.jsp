@@ -19,6 +19,8 @@
 			<td width="120"><a href="/notice/list"><spring:message code="menu.notice.member" /></a></td>
 			<!-- 회원(인가: 관리자, 회원, 메니저)  -->
 			<sec:authorize access="isAuthenticated()">
+			<!-- 상품 리스트 -->
+                    <td width="120"><a href="/item/list">상품리스트</a></td>
 
 
 				<!-- 인증완료, (인가: 관리자)일때 들어갈 메뉴  -->
@@ -36,6 +38,8 @@
 						<!-- 회원게시판리스트 -->
 						<td width="120"><a href="/board/list?page=1&sizePerPage=10">회원게시판리스트</a></td>
 						<td width="120"><a href="/notice/list"><spring:message code="menu.notice.member" /></a></td>
+						<!-- 공지사항 리스트 -->
+                    <td width="120"><a href="/item/list"><spring:message code="menu.item.member" /></a></td>
 					</sec:authorize>
 				</div>
 
@@ -44,6 +48,8 @@
 					<!-- 회원게시판리스트 -->
 					<td width="120"><a href="/board/list?page=1&sizePerPage=10">회원게시판리스트</a></td>
 					<td width="120"><a href="/notice/list"><spring:message code="menu.notice.member" /></a></td>
+					<!-- 공지사항 리스트 -->
+                    <td width="120"><a href="/item/list"><spring:message code="menu.item.member" /></a></td>
 				</sec:authorize>
 			</sec:authorize>
 		</tr>

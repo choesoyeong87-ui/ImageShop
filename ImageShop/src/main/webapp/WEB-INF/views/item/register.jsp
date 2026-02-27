@@ -10,8 +10,7 @@
 	<spring:message code="item.header.register" />
 </h2>
 
-<form:form modelAttribute="item" action="register"
-            enctype="multipart/form-data">
+<form:form modelAttribute="item" action="/item/register" enctype="multipart/form-data" method="post">
             <table>
                 <tr>
                     <td><spring:message code="item.itemName" /></td>
@@ -57,13 +56,13 @@
 </div>
 <script>
 	$(document).ready(function() {
-		var formObj = $("#notice");
+		var formObj = $("#item");
 		$("#btnRegister").on("click", function() {
 			formObj.submit();
 		});
 
 		$("#btnList").on("click", function() {
-			self.location = "/notice/list";
+			self.location = "/item/list";
 		});
 	});
 </script>
