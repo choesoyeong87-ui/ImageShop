@@ -23,11 +23,11 @@
 
 	<div class="container" align="center">
 		<h2>
-			<spring:message code="board.header.read" />
+			<spring:message code="board.header.modify" />
 		</h2>
 		<form:form modelAttribute="board" action="/board/modify" method="post">
 			<form:hidden path="boardNo" />
-			!-- 현재 페이지 번호와 페이징 크기를 숨겨진 필드 요소를 사용하여 전달한다. --> 
+			<!-- 현재 페이지 번호와 페이징 크기를 숨겨진 필드 요소를 사용하여 전달한다. --> 
  			<input type="hidden" id="page" name="page" value="${pgrq.page}">
 			<input type="hidden" id="sizePerPage" name="sizePerPage" value="${pgrq.sizePerPage}">
 			<table>

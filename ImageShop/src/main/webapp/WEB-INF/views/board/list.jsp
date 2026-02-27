@@ -24,6 +24,19 @@
 			<h2>
 				<spring:message code="board.header.list" />
 			</h2>
+			<!-- 검색 폼을 만든다. -->
+			<form:form modelAttribute="pgrq" method="get" action="/board/list${pgrq.toUriStringByPage(page)}">
+				<form:select path="searchType" items="${searchTypeCodeValueList}"
+					itemValue="value" itemLabel="label" />
+
+				<form:input path="keyword" />
+				<button id='searchBtn'>
+					<spring:message code="action.search" />
+				</button>
+			</form:form>
+
+
+
 			<sec:authorize access="hasRole('ROLE_MEMBER')">
 				<a href="/board/register"><spring:message code="action.new" /></a>
 			</sec:authorize>
@@ -54,7 +67,7 @@
 
 							<td align="left"><a
 								href='/board/read
-							${pagination.makeQuery(pagination.pageRequest.page)}&boardNo=${board.boardNo}'>
+							${pgrq.toUriString(pgrq.page)}&boardNo=${board.boardNo}'>
 									${board.title}</a></td>
 							<td align="right">${board.writer}</td>
 							<td align="right">${board.content}</td>
