@@ -33,11 +33,11 @@ div[align="center"] > table:not(.nav-table) {
 
 /* 3. 제목 스타일 */
 h2 {
-    color: #ff4d6d;
+    color: rgb(255, 138, 158);
     font-size: 28px;
     font-weight: 800;
     margin-bottom: 30px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    text-shadow: 1px 1px 2px rgb(0, 0, 0, 0.3);
 }
 
 /* 4. 테이블 깨짐 방지 핵심 설정 (중요!) */
@@ -51,8 +51,7 @@ table {
 th, td {
     padding: 15px 10px;
     text-align: center;
-    border-bottom: 1px solid #ffe5ec;
-    /* 글자가 아래로 길게 늘어지는 현상 방지 */
+    border: 1px solid rgb(255, 230, 230);    /* 글자가 아래로 길게 늘어지는 현상 방지 */
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -111,4 +110,9 @@ div:last-child {
     margin-top: 30px;
     color: #ff8fa3;
     font-size: 14px;
+}
+
+.mainmenu {
+	color: white;
+	border-color: white;
 }

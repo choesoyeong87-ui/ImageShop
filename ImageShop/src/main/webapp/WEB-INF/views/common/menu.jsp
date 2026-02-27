@@ -19,6 +19,7 @@
 			
                     
 				<!-- 인증완료, (인가: 관리자)일때 들어갈 메뉴  -->
+				<div class="mainmenu">
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<!-- 코드그룹관리메뉴 -->
 					<td width="120"><a href="/codegroup/list"><spring:message
@@ -32,6 +33,7 @@
 								<!-- 회원게시판리스트 -->
                     <td width="120"><a href="/board/list?page=1&sizePerPage=10">회원게시판리스트</a></td>
 				</sec:authorize>
+                    </div>
 
 				<!-- 인증완료,(인가: 관리자)일때 들어가는 메뉴 -->
                 <sec:authorize access="hasRole('ROLE_MEMBER')">

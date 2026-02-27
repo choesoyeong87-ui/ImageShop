@@ -1,6 +1,7 @@
 package com.project.controller;
 
-import java.awt.PageAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.project.common.domain.CodeLabelValue;
 import com.project.common.domain.PageRequest;
 import com.project.common.domain.Pagination;
 import com.project.common.security.domain.CustomUser;
@@ -61,7 +63,7 @@ public class BoardController {
 	}
 
 	// 게시글 목록 페이지
-	
+
 	@GetMapping("/list")
 	public void list(@ModelAttribute("pgrq") PageRequest pageRequest,Model model) throws Exception {
 		if(pageRequest.getPage()== 0) {
@@ -74,36 +76,48 @@ public class BoardController {
 		//현재페이지 4와 한페이지당 보여주는갯수가 10개로 셋팅이 되어있음
 		pagination.setPageRequest(pageRequest);
 		//리스트의 전체갯수를 셋팅하고 다시계산한다.
-		pagination.setTotalCount(service.count());
+		pagination.setTotalCount(service.count(pageRequest));
 		//화면에 페이지를 보여주는 정보를 제공한다.
 		model.addAttribute("pagination",pagination);
-	}
+		// 검색 유형의 코드명과 코드값을 정의한다. 
+		List<CodeLabelValue> searchTypeCodeValueList = new 
+		ArrayList<CodeLabelValue>(); 
+		searchTypeCodeValueList.add(new CodeLabelValue("n", "---")); 
+		searchTypeCodeValueList.add(new CodeLabelValue("t", "Title")); 
+		searchTypeCodeValueList.add(new CodeLabelValue("c", "Content")); 
+		searchTypeCodeValueList.add(new CodeLabelValue("w", "Writer")); 
+		searchTypeCodeValueList.add(new CodeLabelValue("tc", "Title OR Content")); 
+		searchTypeCodeValueList.add(new CodeLabelValue("cw", "Content OR  Writer")); 
+		searchTypeCodeValueList.add(new CodeLabelValue("tcw", "Title OR Content OR Writer")); 
+		 
+		model.addAttribute("searchTypeCodeValueList", searchTypeCodeValueList); 
+		}
 
+	
 	// 게시글 상세 페이지
 	@GetMapping("/read")
-	public void read(Board board, @ModelAttribute("pgrq") PageRequest 
-			pageRequest, Model model) throws Exception {
+	public void read(Board board, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
 		model.addAttribute(service.read(board));
 	}
 
 	// 게시글 수정 페이지
 	@GetMapping("/modify")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-	public void modifyForm(Board board,@ModelAttribute("pgrq") PageRequest 
-			pageRequest, Model model) throws Exception {
+	public void modifyForm(Board board, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
 		model.addAttribute(service.read(board));
 	}
 
 	// 게시글 수정 처리
 	@PostMapping("/modify")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-	public String modify(Board board,@ModelAttribute("pgrq")  PageRequest pageRequest,RedirectAttributes rttr) throws Exception {
+	public String modify(Board board, @ModelAttribute("pgrq") PageRequest pageRequest, RedirectAttributes rttr)
+			throws Exception {
 		int count = service.modify(board);
-		
-		// RedirectAttributes 객체에 일회성 데이터를 지정하여 전달한다. 
-		rttr.addAttribute("page", pageRequest.getPage()); 
-		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage()); 
-		
+
+		// RedirectAttributes 객체에 일회성 데이터를 지정하여 전달한다.
+		rttr.addAttribute("page", pageRequest.getPage());
+		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage());
+
 		if (count != 0) {
 			rttr.addFlashAttribute("msg", "SUCCESS");
 		} else {
@@ -115,13 +129,13 @@ public class BoardController {
 	// 게시글 삭제 처리
 	@GetMapping("/remove")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-	public String remove(Board board,PageRequest pageRequest, RedirectAttributes rttr) throws Exception {
+	public String remove(Board board, PageRequest pageRequest, RedirectAttributes rttr) throws Exception {
 		int count = service.remove(board);
-		
-		// RedirectAttributes 객체에 일회성 데이터를 지정하여 전달한다. 
-		rttr.addAttribute("page", pageRequest.getPage()); 
+
+		// RedirectAttributes 객체에 일회성 데이터를 지정하여 전달한다.
+		rttr.addAttribute("page", pageRequest.getPage());
 		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage());
-		
+
 		if (count != 0) {
 			rttr.addFlashAttribute("msg", "SUCCESS");
 		} else {
