@@ -43,21 +43,22 @@
 		INSERT INTO board(board_no,title,content,writer)
 		VALUES(board_seq.NEXTVAL,#{title},#{content},#{writer})
 	</insert>
-
-	<!-- 페이징 요청 정보를 매개 변수로 받아 페이징 처리를 한 게시글 목록을 조회한다. -->
-	<select id="list" resultType="Board"> 
-	
-	<![CDATA[ 
-	SELECT board_no, title, content, writer, reg_date 
-	FROM (select board_no, title, content, writer, reg_date, rownum as rnum from board order by board_no DESC) 
-	where board_no > 0 and rnum between #{sizePerPage}*#{page}-9 and #{sizePerPage}*#{page}
-]]>
-		<include refid="search"></include>
-		
-	<![CDATA[ 
-	ORDER BY board_no DESC, reg_date DESC 
-	]]>
-	</select>
+<!-- 페이징 요청 정보를 매개 변수로 받아 페이징 처리를 한 게시글 목록을 조회한다. -->
+   <select id="list" resultType="Board">
+    <![CDATA[
+    SELECT board_no, title, content, writer, reg_date
+    FROM ( SELECT board_no, title, content, writer, reg_date, rownum rnum
+          FROM ( SELECT board_no, title, content, writer, reg_date FROM board  WHERE board_no > 0
+    ]]>
+                 <include refid="search"/>
+                  ORDER BY board_no DESC
+                )
+          )
+    <![CDATA[
+     WHERE board_no > 0 
+    ]]>
+     <include refid="total_list"/>
+    </select>
 
 	<!-- 게시글 상세 조회 -->
 	<select id="read" resultType="Board">
