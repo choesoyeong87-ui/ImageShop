@@ -3,7 +3,18 @@
 <mapper namespace="com.project.mapper.CommentMapper">
 	<!-- 공지사항 목록 조회 -->
 	<select id="list"> 
-	<![CDATA[ SELECT comment_no, user_id, content, reg_date FROM comment WHERE comment_no > 0 and board_no
+	<![CDATA[ SELECT comment_no, board_no,user_id, content, reg_date FROM comment_board WHERE comment_no > 0 and board_no
 	=#{boardNo} ORDER BY comment_no DESC, reg_date DESC ]]>
 	</select>
+	
+	<insert id="register">
+		INSERT INTO
+		comment_board(comment_no,board_no,user_id,content)
+		VALUES(comment_seq.NEXTVAL,#{boardNo},#{userId},#{content})
+	</insert>
+	
+	<!-- 상품 삭제 처리 -->
+	<delete id="remove">
+		DELETE FROM comment_board WHERE comment_no = #{commentNo}
+	</delete>
 </mapper>

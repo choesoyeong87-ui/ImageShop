@@ -50,4 +50,10 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.count(pageRequest);
 	}
 
+
+	@Override
+	public int count() throws Exception {
+		return mapper.count();
+	}
+
 }

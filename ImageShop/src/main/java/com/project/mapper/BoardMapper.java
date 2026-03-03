@@ -23,6 +23,10 @@ public interface BoardMapper {
 
 	public int count(PageRequest pageRequest) throws Exception;
 
+
+
+	public int count() throws Exception;
+
 	
 	
 }

@@ -108,6 +108,7 @@ public class BoardController {
 		model.addAttribute("board",boardData);
 	//2. 댓글목록추가
 		model.addAttribute("commentList",commentService.list(boardData.getBoardNo()));
+		log.info("commentList="+commentService.list(boardData.getBoardNo()));
 	//3. 댓글 등록을 위한 빈 객체 추가
 		model.addAttribute("comment",new Comment());
 	}

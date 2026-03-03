@@ -17,4 +17,14 @@ public class CommentServiceImpl implements CommentService {
 		return mapper.list(boardNo);
 	}
 
+	@Override
+	public int register(Comment comment) throws Exception {
+		return mapper.register(comment);
+	}
+
+	@Override
+	public int remove(Comment comment) throws Exception {
+		return mapper.remove(comment);
+	}
+
 }
