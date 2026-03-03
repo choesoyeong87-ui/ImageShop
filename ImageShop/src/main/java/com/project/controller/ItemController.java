@@ -20,6 +20,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -75,12 +76,92 @@ public class ItemController {
 		model.addAttribute("itemList", itemList);
 	}
 
+	// 상품 상세 페이지
+	@GetMapping("/read")
+		public String read(Item item, Model model) throws Exception {
+			Item _item = itemService.read(item);
+			model.addAttribute("item",_item);
+			return "item/read";
+		}
+
 	// 상품 수정 페이지
 	@GetMapping("/modify")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String modifyForm(Item item, Model model) throws Exception {
 		model.addAttribute(itemService.read(item));
 		return "item/modify";
+	}
+
+	// 상품 수정 처리
+	@PostMapping("/modify")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public String modify(Item item, RedirectAttributes rttr) throws Exception {
+		MultipartFile pictureFile = item.getPicture();
+		if (pictureFile != null && pictureFile.getSize() > 0) {
+			String createdFilename = uploadFile(pictureFile.getOriginalFilename(), pictureFile.getBytes());
+			// 기존의 이지지파일 삭제
+			Item item2 = itemService.read(item);
+			String pictureUrl = item2.getPictureUrl();
+			File _pictureFile = new File(uploadPath, pictureUrl);
+			_pictureFile.delete();
+
+			item.setPictureUrl(createdFilename);
+		}
+
+		MultipartFile previewFile = item.getPreview();
+		if (previewFile != null && previewFile.getSize() > 0) {
+			String createdFilename = uploadFile(previewFile.getOriginalFilename(), previewFile.getBytes());
+			// 기존의 프리뷰 파일 삭제
+			Item item2 = itemService.read(item);
+			String previewUrl = item2.getPreviewUrl();
+			File _previewFile = new File(uploadPath, previewUrl);
+			_previewFile.delete();
+			item.setPreviewUrl(createdFilename);
+		}
+		int count = itemService.modify(item);
+		if (count != 0) {
+			rttr.addFlashAttribute("msg", "SUCCESS");
+		} else {
+			rttr.addFlashAttribute("msg", "FAIL");
+		}
+		return "redirect:/item/list";
+	}
+
+	// 상품 삭제화면 페이지요청
+	@GetMapping("/remove")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public String removeForm(Item item, Model model) throws Exception {
+		Item _item = itemService.read(item);
+		model.addAttribute(_item);
+		return "item/remove";
+	}
+
+	// 상품 삭제 처리
+	@PostMapping("/remove")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public String remove(Item item, RedirectAttributes rttr) throws Exception {
+		// 외장하드에있는 상품이미지를 제거
+		Item _item = itemService.read(item);
+		String pictureUrl = _item.getPictureUrl();
+		String previewUrl = _item.getPreviewUrl();
+		if (pictureUrl != null && pictureUrl.length() > 0) {
+			File _pictureFile = new File(uploadPath, pictureUrl);
+			_pictureFile.delete();
+		}
+
+		if (previewUrl != null && previewUrl.length() > 0) {
+
+			File _previewFile = new File(uploadPath, previewUrl);
+			_previewFile.delete();
+		}
+		// item 상품테이블에서 삭제처리
+		int count = itemService.remove(item);
+		if (count != 0) {
+			rttr.addFlashAttribute("msg", "SUCCESS");
+		} else {
+			rttr.addFlashAttribute("msg", "FAIL");
+		}
+		return "redirect:/item/list";
 	}
 
 	// 미리보기 이미지 표시(썸네일)
@@ -117,6 +198,7 @@ public class ItemController {
 	public ResponseEntity<byte[]> pictureFile(Item item) throws Exception {
 		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;
+
 		// 썸네일 이미지 파일명을디비로부터 가져온다.
 		String fileName = itemService.getPicture(item);
 		try {
