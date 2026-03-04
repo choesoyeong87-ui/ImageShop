@@ -7,13 +7,14 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <h2>
-	<spring:message code="item.header.read" />
+	<spring:message code="item.header.remove" />
 </h2>
 
-<form:form modelAttribute="item" action="/item/buy" 
+<form:form modelAttribute="item" action="/item/remove"
 	enctype="multipart/form-data" method="post">
 	<form:hidden path="itemId" />
-	
+	<form:hidden path="pictureUrl" />
+	<form:hidden path="previewUrl" />
 
 	<table>
 		<tr>
@@ -34,35 +35,43 @@
 			<td><spring:message code="item.preview" /></td>
 			<td><img src="display?itemId=${item.itemId}" width="210"></td>
 		</tr>
-		
+		<tr>
+
+			<td><spring:message code="item.itemFile"/></td>
+			<td><input type="file" name="picture" readonly="true"/></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><spring:message code="item.itemPreviewFile" /></td>
+			<td><input type="file" name="preview" readonly="true"/></td>
+			<td></td>
+
+		</tr>
 
 		<tr>
 
 			<td><spring:message code="item.itemDescription" /></td>
-			<td><form:textarea path="description" /></td>
+			<td><form:textarea path="description" readonly="true"/></td>
 			<td><form:errors path="description" /></td>
 		</tr>
 	</table>
-</form:form>
-
 <div>
-	
-
-	<button type="submit" id="btnBuy">
-		<spring:message code="action.buy" />
-	</button>
-</div>
-<div>
-	
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
+		<button type="button" id="btnRemove">
+			<spring:message code="action.remove" />
+		</button>
+	</sec:authorize>
 
 	<button type="button" id="btnList">
 		<spring:message code="action.list" />
 	</button>
 </div>
+</form:form>
+
 <script>
 	$(document).ready(function() {
 		var formObj = $("#item");
-		$("#btnBuy").on("click", function() {
+		$("#btnRemove").on("click", function() {
 			formObj.submit();
 		});
 

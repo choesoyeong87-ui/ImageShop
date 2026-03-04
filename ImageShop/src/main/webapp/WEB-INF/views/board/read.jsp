@@ -130,13 +130,13 @@
 					<td align="left"><sec:authorize access="isAuthenticated()">
 							<button type="button" id="btnRegister">삭제</button>
 						</sec:authorize></td>
-<td align="left">
+
 					<form action="/comment/remove" method="post">
 						<input type="hidden" name="commentNo" value="${comment.commentNo}">
 						<input type="hidden" name="boardNo" value="${board.boardNo}">
-						<button type="submit">삭제</button>
+						<button type="submit" id="">삭제</button>
 					</form>
-</td>
+
 
 				</tr>
 
