@@ -3,6 +3,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link rel="stylesheet" href="/css/pink.css">
 <div>
-	<h2>${msg}</h2>
-	<a href="/coin/list"><spring:message code="action.list" /></a>
+	<h2>
+		<spring:message code="item.header.downloadError" />
+	</h2>
+	<p>
+		<spring:message code="item.notMyItem" />
+	</p>
+	<a href="/userItem/list"><spring:message code="action.list" /></a>
 </div>

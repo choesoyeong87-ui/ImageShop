@@ -4,7 +4,9 @@
 <link rel="stylesheet" href="/css/pink.css">
 <div>
 	<h2>
-		<spring:message code="common.cannotSetupAdmin"/>
+		<spring:message code="common.error.errorOccurred" />
 	</h2>
-	<a href="/auth/login"><spring:message code="action.home" /></a>
+	<a href="javascript:window.history.back();"><spring:message
+			code="common.error.backPage" /></a><br> <a href="/"><spring:message
+			code="common.error.returnHome" /></a>
 </div>

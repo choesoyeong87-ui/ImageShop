@@ -9,9 +9,9 @@
 <h2>
 	<spring:message code="item.header.read" />
 </h2>
-
+<div>
 <form:form modelAttribute="item" action="/item/buy" 
-	enctype="multipart/form-data" method="post">
+	method="post">
 	<form:hidden path="itemId" />
 	
 
@@ -44,7 +44,7 @@
 		</tr>
 	</table>
 </form:form>
-
+</div>
 <div>
 	
 

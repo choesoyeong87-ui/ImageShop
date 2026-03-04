@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.project.common.security.domain.CustomUser;
 import com.project.domain.Member;
 import com.project.domain.UserItem;
+import com.project.exception.NotMyItemException;
 import com.project.service.UserItemService;
 
 @Controller
@@ -56,6 +57,12 @@ public class UserItemController {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
 	public ResponseEntity<byte[]> download(UserItem _userItem, Authentication authentication) throws Exception {
 		UserItem userItem = service.read(_userItem);
+
+		CustomUser customUser = (CustomUser) authentication.getPrincipal();
+		Member member = customUser.getMember();
+		if (member.getUserNo() != userItem.getUserNo()) {
+			throw new NotMyItemException("이것은 나의 구매 상품이 아니다.");
+		}
 		String fullName = userItem.getPictureUrl();
 		InputStream in = null;
 		ResponseEntity<byte[]> entity = null;
@@ -63,12 +70,12 @@ public class UserItemController {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			in = new FileInputStream(uploadPath + File.separator + fullName);
-			//404e5234-fdc4-4dab-9218-fe7aea891192_20260109_143440.png => 143440.png
+			// 404e5234-fdc4-4dab-9218-fe7aea891192_20260109_143440.png => 143440.png
 			String fileName = fullName.substring(fullName.indexOf("_") + 1);
 
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.add("Content-Disposition","attachment;filename=\"" 
-			+ new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
+			headers.add("Content-Disposition",
+					"attachment;filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
 
 			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -79,5 +86,11 @@ public class UserItemController {
 		}
 
 		return entity;
+	}
+
+	// 본인 상품 예외 처리
+	@GetMapping("/notMyItem")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+	public void notMyItem(Model model) throws Exception {
 	}
 }
