@@ -27,4 +27,9 @@ public class CommentServiceImpl implements CommentService {
 		return mapper.remove(comment);
 	}
 
+	@Override
+	public int update(Comment comment) throws Exception {
+		return mapper.update(comment);
+	}
+
 }

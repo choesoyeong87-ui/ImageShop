@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.common.domain.CodeLabelValue;
@@ -99,7 +100,8 @@ public class BoardController {
 	
 	// 게시글 상세 페이지
 	@GetMapping("/read")
-	public void read(Board board, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
+	public void read(Board board,@RequestParam(value="targetNo",required=false) Integer targetNo,
+			@ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
 		
 		
 	//댓글기능추가
@@ -111,6 +113,10 @@ public class BoardController {
 		log.info("commentList="+commentService.list(boardData.getBoardNo()));
 	//3. 댓글 등록을 위한 빈 객체 추가
 		model.addAttribute("comment",new Comment());
+		
+	//4. 수정대상을 모델에 담아 전송	
+		model.addAttribute("targetNo",targetNo);
+		
 	}
 
 	// 게시글 수정 페이지

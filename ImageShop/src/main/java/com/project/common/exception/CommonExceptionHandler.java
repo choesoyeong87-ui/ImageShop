@@ -53,4 +53,5 @@ public class CommonExceptionHandler {
 		// 클라이언트가 AJAX 요청으로 해당 요청을 보냈는지를 확인함 아니면, 일반적인 폼 submit 등의 요청인 경우
 		return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 	}
+	
 }

@@ -26,15 +26,14 @@ public class CommentController {
 
 	@GetMapping("/register")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-	public void registerForm(Model model, Comment comment,Authentication authentication) throws Exception {
+	public void registerForm(Model model, Comment comment, Authentication authentication) throws Exception {
 		CustomUser customUser = (CustomUser) authentication.getPrincipal();
 		Member member = customUser.getMember();
-		
+
 		comment.setUserId(member.getUserId());
-		
+
 		model.addAttribute(comment);
-		
-		
+
 	}
 
 	@PostMapping("/register")
@@ -52,13 +51,28 @@ public class CommentController {
 
 	// 삭제 처리
 	@PostMapping("/remove")
-	@PreAuthorize("hasRole('ROLE_MEMBER')")
+	@PreAuthorize("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')")
 	public String remove(Comment comment, RedirectAttributes rttr) throws Exception {
 		int count = service.remove(comment);
 		if (count != 0) {
 			rttr.addFlashAttribute("msg", "SUCCESS");
 		} else {
 			rttr.addFlashAttribute("msg", "FAIL");
+		}
+		return "redirect:/board/read?boardNo=" + comment.getBoardNo();
+	}
+
+	// 수정처리
+	@PostMapping("/modify")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+	public String modify(RedirectAttributes rttr, Comment comment) throws Exception {
+		log.info("modify" + comment);
+		int count = service.update(comment);
+		log.info("modify" + count);
+		if (count != 0) {
+			rttr.addFlashAttribute("msg", "SUCCESS");
+		} else {
+			rttr.addFlashAttribute("msg", "FAILED");
 		}
 		return "redirect:/board/read?boardNo=" + comment.getBoardNo();
 	}

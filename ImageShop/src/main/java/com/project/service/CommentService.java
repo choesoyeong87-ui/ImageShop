@@ -15,4 +15,6 @@ public interface CommentService {
 
 	public int remove(Comment comment) throws Exception;
 
+	public int update(Comment comment) throws Exception;
+
 }

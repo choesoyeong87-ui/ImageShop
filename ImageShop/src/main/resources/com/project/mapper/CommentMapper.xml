@@ -17,4 +17,10 @@
 	<delete id="remove">
 		DELETE FROM comment_board WHERE comment_no = #{commentNo}
 	</delete>
+	
+	<!-- 댓글수정처리 -->
+	<update id="update">
+		UPDATE comment_board SET content =#{content}
+		WHERE comment_no = #{commentNo}
+	</update>
 </mapper>
