@@ -15,11 +15,21 @@
 	</select>
 
 	<!-- 상품 상세 조회 -->
-	<select id="read" >
-		SELECT item_id,item_name,price,description,picture_url,preview_url
-		FROM item WHERE item_id = #{itemId}
+	<select id="read">
+		SELECT
+		item_id,item_name,price,description,picture_url,preview_url
+		FROM item
+		WHERE item_id = #{itemId}
 	</select>
-	
+
+	<!-- 상품 수정 처리 -->
+	<update id="modify">
+		UPDATE item SET item_name = #{itemName},price =
+		#{price},description = #{description},picture_url = #{pictureUrl},
+		preview_url = #{previewUrl} WHERE item_id = #{itemId}
+	</update>
+
+
 	<!-- 원본 이미지 표시 -->
 	<select id="getPicture" resultType="String">
 		SELECT picture_url FROM item
@@ -31,4 +41,10 @@
 		SELECT preview_url FROM item
 		WHERE item_id = #{itemId}
 	</select>
+
+	<!-- 상품 삭제 처리 -->
+	<delete id="remove">
+		DELETE FROM item
+		WHERE item_id = #{itemId}
+	</delete>
 </mapper>

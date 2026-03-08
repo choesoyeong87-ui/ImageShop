@@ -3,11 +3,12 @@ package com.project.service;
 import java.util.List;
 
 import org.jspecify.annotations.Nullable;
+import org.springframework.stereotype.Service;
 
 import com.project.common.domain.PageRequest;
 import com.project.domain.Board;
 
-
+@Service
 public interface BoardService{
 
 	public int register(Board board)throws Exception;
@@ -17,10 +18,10 @@ public interface BoardService{
 	public Board read(Board board) throws Exception;
 
 	public int modify(Board board)throws Exception;
-
+	
 	public int remove(Board board) throws Exception;
 	
-	//public int count() throws Exception;
+	public int count() throws Exception;
 
 	public List<Board> list(PageRequest pageRequest) throws Exception;
 

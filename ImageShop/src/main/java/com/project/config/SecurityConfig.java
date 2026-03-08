@@ -72,7 +72,7 @@ public class SecurityConfig {
 	    	.logoutUrl("/auth/logout")                // 로그아웃을 처리할 URL (기본값: /logout)
 	        .logoutSuccessUrl("/auth/login")          // 로그아웃 성공 시 이동할 페이지
 	        .invalidateHttpSession(true)         // HTTP 세션 무효화 (기본값: true)
-	        .deleteCookies("JSESSIONID", "remember-me") // 로그아웃 시 관련 쿠키 삭제
+	        .deleteCookies("JSESSIONID", "remember-me") // 로그아웃 시 관련 쿠키 삭제 리맴버미가 자동로그인이라 그것까지 삭제
 	        .permitAll()                         // 로그아웃 요청은 누구나 접근 가능해야 함
 	    );
 	    

@@ -14,12 +14,15 @@ public interface MemberService {
 
 	public Member read(Member member) throws Exception;
 
-	public int modify(Member member)throws Exception;
+	public int modify(Member member) throws Exception;
 
-	public int remove(Member member)throws Exception;
+	public int remove(Member member) throws Exception;
 
-	public int countAll()throws Exception;
+	public int countAll() throws Exception;
 
 	public void setupAdmin(Member member) throws Exception;
-	
+
+	// 회원의 코인을 반환한다.
+	public int getCoin(Member member) throws Exception;
+
 }

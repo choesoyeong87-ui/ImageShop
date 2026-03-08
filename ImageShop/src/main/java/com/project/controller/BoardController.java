@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.common.domain.CodeLabelValue;
@@ -19,8 +20,10 @@ import com.project.common.domain.PageRequest;
 import com.project.common.domain.Pagination;
 import com.project.common.security.domain.CustomUser;
 import com.project.domain.Board;
+import com.project.domain.Comment;
 import com.project.domain.Member;
 import com.project.service.BoardService;
+import com.project.service.CommentService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardController {
 	@Autowired
 	private BoardService service;
-
+	@Autowired
+	private CommentService commentService;
 	// 게시글 등록 페이지
 	@GetMapping("/register")
 	@PreAuthorize("hasRole('ROLE_MEMBER')")
@@ -96,8 +100,23 @@ public class BoardController {
 	
 	// 게시글 상세 페이지
 	@GetMapping("/read")
-	public void read(Board board, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
-		model.addAttribute(service.read(board));
+	public void read(Board board,@RequestParam(value="targetNo",required=false) Integer targetNo,
+			@ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
+		
+		
+	//댓글기능추가
+	//1. 게시글 상세정보추가
+		Board boardData = service.read(board);
+		model.addAttribute("board",boardData);
+	//2. 댓글목록추가
+		model.addAttribute("commentList",commentService.list(boardData.getBoardNo()));
+		log.info("commentList="+commentService.list(boardData.getBoardNo()));
+	//3. 댓글 등록을 위한 빈 객체 추가
+		model.addAttribute("comment",new Comment());
+		
+	//4. 수정대상을 모델에 담아 전송	
+		model.addAttribute("targetNo",targetNo);
+		
 	}
 
 	// 게시글 수정 페이지
